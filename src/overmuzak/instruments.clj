@@ -1,8 +1,9 @@
 (ns overmuzak.instruments
   (:require [overtone.core :refer :all :as O]
-            [overtone.inst.drum :as DRUM]
-            [overtone.inst.piano :as PIANO]
-            [overtone.inst.synth :as SYNTH]))
+           ; [overtone.inst.drum :as DRUM]
+           ; [overtone.inst.piano :as PIANO]
+           ; [overtone.inst.synth :as SYNTH]
+            ))
 
 (definst da-funk
   [freq 440 dur 1.0 amp 1.0 cutoff 1700 boost 6 dist-level 0.015]

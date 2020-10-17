@@ -1,4 +1,5 @@
-(ns overmuzak.core)
+(ns overmuzak.core
+  (:require [overtone.core :as O]))
 
 (defn foo
   "I don't do a whole lot."
