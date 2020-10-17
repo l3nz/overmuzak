@@ -7,7 +7,9 @@
   
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [overtone "0.10.6"]
-                 [leipzig "0.10.0"]]
+                 ;[leipzig "0.10.0"]
+                 [pjagielski/disclojure "0.1.4" :exclusions [overtone]]
+                 [clj-http "3.10.3"]]
 
   :aliases {"fix" ["cljfmt" "fix"]
             ; Kondo
