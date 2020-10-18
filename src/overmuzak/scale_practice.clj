@@ -26,7 +26,7 @@
   (scale/scale [2 1 2 2 1 2 2]))
 
 (def scale-tempo
-  [[1] 1/2 1/2 1/2 1/2 1/2 1/2])
+  [1/2 1/2 1/2 1/2 1/2 1/2 1/2])
 
 (defn as-scale
   "Builds a scale using a different function for
@@ -43,10 +43,10 @@
   in `scale-tempo` above.
 
   "
-  ([tonalita n_octaves fn-scale-asc fn-scale-desc]
+  ([tonica n_octaves fn-scale-asc fn-scale-desc]
    (let [n_notes (* n_octaves 7)
-         scale-asc (comp scale/low tonalita fn-scale-asc)
-         scale-desc (comp scale/low tonalita fn-scale-desc)
+         scale-asc (comp scale/low tonica fn-scale-asc)
+         scale-desc (comp scale/low tonica fn-scale-desc)
 
          grades (concat
                  (map scale-asc (range 0 n_notes))
@@ -57,19 +57,13 @@
 
                     grades))))
 
-  ([tonalita n_octaves fn-scale]
-   (as-scale tonalita n_octaves fn-scale fn-scale)))
-
-(defn major-scale [tonalita octaves]
-  (as-scale tonalita octaves scale/major))
-
-(defn minor-scale [tonalita octaves]
-  (as-scale tonalita octaves scale-min-melodic-asc scale-min-melodic-desc))
+  ([tonica n_octaves fn-scale]
+   (as-scale tonica n_octaves fn-scale fn-scale)))
 
 (defn as-track [part]
   (->> part
        (m/all :part :piano)
-       (m/tempo (m/bpm 90))))
+       (m/tempo (m/bpm 25))))
 
 (comment
   (live/play
@@ -78,18 +72,28 @@
   ;
   )
 
-(defn go! []
-  (live/play
-   (->> []
-        (m/then (->> my-track)))))
+(comment
+  (defn go! []
+    (live/play
+     (->> []
+          (m/then (->> my-track))))))
 
-(defn minor! [scale]
-  (live/play
-   (as-track
-    (minor-scale scale 1))))
-
-(defn major! [scale]
+(defn minor! [tonica]
   (live/play
    (as-track
-    (major-scale scale 1))))
+    (as-scale tonica 2
+              scale-min-melodic-asc
+              scale-min-melodic-desc))))
 
+(defn major! [tonica]
+  (live/play
+   (as-track
+    (as-scale tonica 2 scale/major))))
+
+(defn blues! [tonica]
+  (live/play
+   (as-track
+    (as-scale tonica 1 scale/blues))))
+
+(defn ! []
+  (live/stop))
