@@ -1,7 +1,10 @@
 (ns overmuzak.core
   (:require [overtone.core :as O]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn boot! []
+  (O/boot-server))
+
+(defn status []
+  (println "Server-info:"  (O/server-info))
+  (println "Server-status:"  (O/server-status))
+  (println "Server-opts:" (O/server-opts)))

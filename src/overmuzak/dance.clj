@@ -38,6 +38,7 @@
        (where :pitch (comp scale/low scale/G scale/minor))
        (all :amp 0.5)))
 
+; trasforma il pitch da nota a hz
 (def da-funk-track
   (->> da-funk-phrase
        (all :part :da-funk)
