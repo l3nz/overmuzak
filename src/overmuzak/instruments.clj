@@ -1,5 +1,6 @@
 (ns overmuzak.instruments
   (:require [overtone.core :refer :all :as O]
+    ;[overtone.gui.scope :as SCOPE] ????
            ; [overtone.inst.drum :as DRUM]
            ; [overtone.inst.piano :as PIANO]
            ; [overtone.inst.synth :as SYNTH]
@@ -72,6 +73,45 @@
            amp)]))
 
 
+(definst
+  testx []
+  (rlpf:ar
+    (dust:ar [12,15])
+    (+ 1500 (* 200 (sin-osc 1)))
+
+    0.01
+    )
+
+         )
+
+
+(definst
+  test2 [freq 440]
+  (comb-n
+    (mix [
+    (sin-osc
+      (midicps
+        (+ 20 (* 60
+
+                 (+ 0.1 (lf-saw 0.05)))))
+      )
+
+
+          (sin-osc freq)
+
+          ])
+
+    1 0.3 2
+
+
+    )
+  )
+
+(comment
+  (def t (test2))
+  (ctl t :freq 880)
+  (kill t)
+  )
 
 ; per vedere un synth
 ; (show-graphviz-synth snaremix)

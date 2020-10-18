@@ -8,7 +8,9 @@
 
 (defmethod live/play-note :piano [{midi :pitch seconds :duration amp :amp}]
   (when midi
-    (prn "Playing note" (pitch/find-note-name midi) " for " seconds)
+    (println "Playing note" (pitch/find-note-name midi)
+             " for " seconds
+             " (MIDI: " midi ")")
     (PIANO/piano :note midi
                  :random 0
                  ;:vel (* 100.0 amp)
