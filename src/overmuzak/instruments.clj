@@ -100,3 +100,29 @@
 
 ; per vedere un synth
 ; (show-graphviz-synth snaremix)
+
+
+; =========================
+;https://sccode.org/1-5do
+; synths herE: https://sccode.org/1-5aD
+
+(definst
+  violin
+  [midinote 60 dur 1.0 amp 0.8]
+  ; var env = EnvGen.kr(Env.asr(0.1, 1, 0.1), gate, doneAction:2);
+  ; var sig = VarSaw.ar(
+  ;		midinote.midicps,
+  ;		width:LFNoise2.kr(1).range(0.2, 0.8)*SinOsc.kr(5, Rand(0.0, 1.0)).range(0.7,0.8))*0.25;
+
+  (let [env (env-gen (asr 0.4 1 0.3)
+                     (line:kr 1 0 dur)
+                     :action FREE)
+        vibr (* (range-lin (sin-osc:kr 5 (i-rand 0 1)) 0.7 0.9)
+                (range-lin (lf-noise2:kr 1) 0.2 0.8)
+                0.40)
+        sig (var-saw (midicps midinote)
+                     :width vibr)]
+
+    (* sig env  amp);
+    ))
+
