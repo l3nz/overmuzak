@@ -6,6 +6,11 @@
            ; [overtone.inst.synth :as SYNTH]
             ))
 
+;
+; Lots of cool instruments here
+; https://github.com/ctford/whelmed/blob/f937e74f150ed594c2d862834cf5ed41deb80f5a/src/whelmed/instrument.clj#L25
+
+
 (definst da-funk
   [freq 440 dur 1.0 amp 1.0 cutoff 1700 boost 6 dist-level 0.015]
 
@@ -126,3 +131,48 @@
     (* sig env  amp);
     ))
 
+(definst
+  chorus
+  [midinote 60 pw 0.5 dur 1.0 amp 1.0]
+  ; The example you provided isn't even a choir.
+  ; That's pulse wave filtered, with heavy vibrato,
+  ; a bit of chorus and too much reverb
+  (let [freq (midicps midinote)
+        mouse-y (mouse-y:kr 0 1)
+
+        env (env-gen (asr 0.1 5 0.8)
+                     (line:kr 1 0 dur)
+                     :action FREE)
+
+        vibr    (sin-osc:kr 3)]
+
+    (->
+        ; start with pulse
+     (pulse :freq freq :width pw)
+
+        ; vibrato
+     (* (range-lin vibr 0.6 1))
+        ;
+        ;(+ (* 2 (sin-osc :freq (* freq 0.5))))
+        ; filter
+     (moog-ff   :freq (* freq 1.4) :gain 1)
+        ; add reverb
+     (free-verb :mix 0.7 :room 0.2)
+     (* env  amp))))
+
+(definst sing [freq 440 dur 1.0 volume 1.0 pan 0 wet 0.5 room 0.5]
+  (-> (saw freq)
+      (+ (saw (* freq 1.01)))
+      (rlpf (mul-add (sin-osc 8) 200 1500) 1/8)
+      (lpf 5000)
+      (* 1/4 (env-gen (asr 0.03 0.3 0.1) (line:kr 1 0 dur)))))
+
+(definst kraft-bass [freq 440 dur 1.0 vol 1.0 pan 0 wet 0.5 room 0.5]
+  (let [envelope (env-gen (asr 0 1 1) (line:kr 1.0 0.0 dur))
+        level (+ 100 (env-gen (perc 0 3) :level-scale 6000))
+        osc (mix [(saw freq)
+                  (saw (* freq 1.005))
+                  (pulse (/ freq 2) 0.5)])]
+    (-> osc
+        (lpf level)
+        (* envelope))))
